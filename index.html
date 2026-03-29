@@ -3,81 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>서울 안심·매너 맵</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <title>서울 매너 맵</title>
 
     <link rel="stylesheet" href="./css/style.css" />
-
-    <style>
-      /*
-       * SVG 내부 요소와 ::before pseudo element는
-       * Tailwind 유틸리티 클래스로 대체가 불가능한 것들만 작성
-       */
-
-      /* SVG path/text — SVG 전용 속성(fill, stroke, dominant-baseline 등) */
-      #seoul-gu-svg .gu-path {
-        fill: rgba(255, 255, 255, 0.03);
-        stroke: rgba(74, 222, 128, 0.2);
-        stroke-width: 1px;
-        cursor: pointer;
-        transition:
-          fill 0.2s,
-          stroke 0.2s,
-          filter 0.2s;
-      }
-      #seoul-gu-svg .gu-path:hover {
-        fill: rgba(74, 222, 128, 0.08);
-        stroke: rgba(74, 222, 128, 0.55);
-        filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.3));
-      }
-      #seoul-gu-svg .gu-text {
-        font-family: "Noto Sans KR", sans-serif;
-        font-size: 9.5px;
-        font-weight: 700;
-        fill: rgba(255, 255, 255, 0.45);
-        pointer-events: none;
-        text-anchor: middle;
-        dominant-baseline: central;
-        transition: fill 0.2s;
-      }
-      #seoul-gu-svg g:hover .gu-text {
-        fill: rgba(74, 222, 128, 0.9);
-      }
-
-      /* 배경 그리드 — ::before pseudo element */
-      #gu-map-container::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image:
-          linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-          linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.015) 1px,
-            transparent 1px
-          );
-        background-size: 48px 48px;
-        pointer-events: none;
-      }
-
-      /* 깜빡이는 점 — ::before pseudo element */
-      .live-dot::before {
-        content: "";
-        display: inline-block;
-        width: 6px;
-        height: 6px;
-        background: #4ade80;
-        border-radius: 50%;
-        margin-right: 6px;
-        animation: blink 1.4s ease infinite;
-      }
-    </style>
   </head>
 
   <body class="bg-bg text-gray-50 font-sans overflow-hidden h-screen">
@@ -91,13 +19,13 @@
           <div
             class="live-dot inline-flex items-center bg-accent/10 border border-accent/25 text-accent font-mono text-[0.65rem] tracking-widest px-3 py-1 rounded mb-4"
           >
-            SEOUL SAFETY MAP v1.0
+            SEOUL MANNER MAP v1.0
           </div>
           <h1 class="text-4xl font-black text-white leading-tight mb-2">
             어느 구를<br />살펴볼까요?
           </h1>
           <p class="text-sm text-muted">
-            자치구를 선택하면 안전 정보를 확인할 수 있어요
+            자치구를 선택하면 안전과 에티켓 정보를 확인할 수 있어요
           </p>
         </div>
 
@@ -110,6 +38,7 @@
             class="w-full h-full"
             style="cursor: grab"
           ></svg>
+
           <div
             id="loading-spinner"
             class="absolute inset-0 flex items-center justify-center"
@@ -118,11 +47,12 @@
               class="w-9 h-9 rounded-full border-2 border-accent/15 border-t-accent animate-spin"
             ></div>
           </div>
+
           <p
             id="zoom-hint"
             class="absolute bottom-2 right-2 font-mono text-[0.65rem] tracking-widest text-muted/60"
           >
-            scroll to zoom · dblclick to reset
+            scroll to zoom
           </p>
         </div>
 
@@ -222,6 +152,7 @@
           "
         >
           <div class="w-9 h-[3px] bg-border rounded-full mx-auto mb-5"></div>
+
           <div class="flex justify-between items-start gap-4">
             <div class="flex-1 min-w-0">
               <span
@@ -240,6 +171,7 @@
               ></p>
               <p id="place-sub" class="text-xs text-muted/70 mt-1"></p>
             </div>
+
             <button
               id="close-panel"
               class="flex-shrink-0 w-8 h-8 flex items-center justify-center border border-border rounded-md text-muted cursor-pointer hover:bg-white/[0.05] hover:text-gray-200 transition-all duration-150"

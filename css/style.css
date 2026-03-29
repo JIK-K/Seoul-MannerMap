@@ -26,6 +26,7 @@
       opacity: 0.2;
     }
   }
+
   @keyframes fadeUp {
     from {
       opacity: 0;
@@ -36,4 +37,43 @@
       transform: translateY(0);
     }
   }
+}
+
+#seoul-gu-svg .gu-path {
+  fill: rgba(255, 255, 255, 0.03);
+  stroke: rgba(74, 222, 128, 0.2);
+  stroke-width: 1px;
+  cursor: pointer;
+  transition:
+    fill 0.2s,
+    stroke 0.2s,
+    filter 0.2s;
+}
+#seoul-gu-svg .gu-path:hover {
+  fill: rgba(74, 222, 128, 0.08);
+  stroke: rgba(74, 222, 128, 0.55);
+  filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.3));
+}
+#seoul-gu-svg .gu-text {
+  font-size: 9.5px;
+  font-weight: 700;
+  fill: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  text-anchor: middle;
+  dominant-baseline: central;
+  transition: fill 0.2s;
+}
+#seoul-gu-svg g:hover .gu-text {
+  fill: rgba(74, 222, 128, 0.9);
+}
+
+.live-dot::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #4ade80;
+  border-radius: 50%;
+  margin-right: 6px;
+  animation: blink 1.4s ease infinite;
 }

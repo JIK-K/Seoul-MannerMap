@@ -1,4 +1,3 @@
-// js/main.js
 import $ from "jquery";
 import * as d3 from "d3";
 import { initMap, bindMarkers } from "./map.js";
@@ -55,7 +54,7 @@ function showMapLoading(visible, message = "LOADING...") {
 
   // jQuery로 DOM 생성 — Tailwind 클래스 적용 가능
   const $overlay = $("<div>", { id: "map-loading" }).addClass(
-    "absolute inset-0 z-40 flex flex-col items-center justify-center gap-3 bg-bg/75 backdrop-blur",
+    "absolute inset-0 z-40 flex flex-col items-center justify-center gap-3 bg-mainColor/75 backdrop-blur",
   );
 
   const $spinner = $("<div>").addClass(
@@ -120,7 +119,7 @@ function drawGuMap(geojson) {
   const projection = d3
     .geoMercator()
     .center([126.978, 37.565])
-    .scale(58000)
+    .scale(120000)
     .translate([VW / 2, VH / 2]);
 
   const path = d3.geoPath().projection(projection);

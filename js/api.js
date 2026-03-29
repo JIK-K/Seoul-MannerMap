@@ -1,10 +1,13 @@
-// js/api.js
 import $ from "jquery";
 
 const SEOUL_API_KEY = import.meta.env.VITE_SEOUL_API_KEY;
 const KAKAO_REST_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
 
-// ── 주소 → 좌표 변환 (카카오 주소검색) ──────────────────────────
+/**
+ * 카카오 주소검색 (주소 -> 좌표 변환)
+ * @param {string} address
+ * @returns
+ */
 async function geocodeAddress(address) {
   try {
     const data = await $.ajax({
@@ -21,8 +24,13 @@ async function geocodeAddress(address) {
   }
 }
 
-// ── 🚬 흡연구역 (smkFclt) ────────────────────────────────────────
-// 좌표 없음 → 카카오 geocoding
+/**
+ * 흡연구역 API는 좌표 정보가 없으므로, 설치 위치(INSTL_PSTN)를 카카오 주소 검색으로 geocoding
+ * 구 이름(CGG_NM)으로 해당 구의 데이터만 필터링
+ * 설치 위치에 괄호로 보조 설명이 있는 경우, 괄호 안 내용을 주소 검색에 활용 (예: "역삼역 4번 출구(강남구청 방향)")
+ * @param {string} guName
+ * @returns
+ */
 export async function fetchSmoking(guName) {
   try {
     const data = await $.ajax({
@@ -64,9 +72,11 @@ export async function fetchSmoking(guName) {
   }
 }
 
-// ── 🚽 공중화장실 (mgisToiletPoi) ────────────────────────────────
-// COORD_X = 경도, COORD_Y = 위도, GU_NAME으로 구 필터
-// 전체 4450건이므로 1000건씩 페이징해서 해당 구만 수집
+/**
+ * 공중화장실 API 호출
+ * @param {string} guName
+ * @returns
+ */
 export async function fetchToilet(guName) {
   try {
     // 1차: 1~1000 호출로 total_count 파악
@@ -121,9 +131,11 @@ export async function fetchToilet(guName) {
   }
 }
 
-// ── 🚒 소방서·119안전센터 (tbFirestationLoc) ─────────────────────
-// 좌표 없음 → FIRESTATION_LOC(위치/주소)로 geocoding
-// FIRESTATION_GCC(관할구역)으로 구 필터
+/**
+ * 소방서 API 호출
+ * @param {string} guName
+ * @returns
+ */
 export async function fetchFireStation(guName) {
   try {
     const data = await $.ajax({
