@@ -15,22 +15,22 @@
         id="gu-map-container"
         class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-gradient-to-b from-[#0d1520] to-bg transition-opacity duration-500"
       >
-        <div class="relative z-10 text-center mb-5 px-6 animate-fadeUp">
+        <div class="relative z-10 text-center mb-[20px] px-[24px] animate-fadeUp">
           <div
-            class="live-dot inline-flex items-center bg-accent/10 border border-accent/25 text-accent font-mono text-[0.65rem] tracking-widest px-3 py-1 rounded mb-4"
+            class="live-dot inline-flex items-center bg-accent/10 border border-accent/25 text-accent font-mono text-[12px] tracking-widest px-[12px] py-[4px] rounded mb-[12px]"
           >
             SEOUL MANNER MAP v1.0
           </div>
-          <h1 class="text-4xl font-black text-white leading-tight mb-2">
+          <h1 class="text-[36px] font-black text-white leading-tight mb-[8px]">
             어느 구를<br />살펴볼까요?
           </h1>
-          <p class="text-sm text-muted">
+          <p class="text-[16px] text-muted">
             자치구를 선택하면 안전과 에티켓 정보를 확인할 수 있어요
           </p>
         </div>
 
         <div
-          class="relative z-10 w-full px-4 animate-fadeUp2"
+          class="relative z-10 w-full px-[16px] animate-fadeUp2"
           style="height: 72vh; max-width: 960px"
         >
           <svg
@@ -44,20 +44,20 @@
             class="absolute inset-0 flex items-center justify-center"
           >
             <div
-              class="w-9 h-9 rounded-full border-2 border-accent/15 border-t-accent animate-spin"
+              class="w-[18px] h-[18px] rounded-full border-[8px] border-accent/15 border-t-accent animate-spin"
             ></div>
           </div>
 
           <p
             id="zoom-hint"
-            class="absolute bottom-2 right-2 font-mono text-[0.65rem] tracking-widest text-muted/60"
+            class="absolute bottom-[8px] right-[8px] font-mono text-[12px] tracking-widest text-muted"
           >
             scroll to zoom
           </p>
         </div>
 
         <p
-          class="relative z-10 font-mono text-xs tracking-widest text-muted/60 mt-3 animate-fadeUp2"
+          class="relative z-10 font-mono text-[14px] tracking-widest text-muted mt-[12px] animate-fadeUp2"
         >
           ↑ 클릭하여 선택
         </p>
@@ -74,11 +74,11 @@
         <!-- 상단 바 -->
         <div
           id="top-bar"
-          class="absolute top-0 left-0 right-0 z-20 flex items-center gap-3 px-4 py-3 bg-bg/85 backdrop-blur-xl border-b border-border"
+          class="absolute top-0 left-0 right-0 z-20 flex items-center gap-[12px] px-[16px] py-[12px] bg-bg backdrop-blur-xl border-b border-border"
         >
           <button
             id="btn-back"
-            class="flex items-center gap-1.5 cursor-pointer bg-white/[0.04] hover:bg-accent/[0.08] border border-border hover:border-accent/40 text-accent font-mono text-[0.72rem] tracking-wider px-3.5 py-2 rounded-md transition-all duration-150 whitespace-nowrap"
+            class="flex items-center gap-[4px] cursor-pointer bg-white/[0.04] hover:bg-accent/[0.08] border border-border hover:border-accent/40 text-accent font-mono text-[12px] tracking-wider px-[12px] py-[8px] rounded-md transition-all duration-150 whitespace-nowrap"
           >
             <svg
               width="11"
@@ -98,14 +98,14 @@
           <div class="flex-1 text-center">
             <span
               id="selected-gu-name"
-              class="font-mono text-sm tracking-wider text-gray-100"
+              class="font-mono text-[12px] tracking-wider text-gray-100"
               >—</span
             >
           </div>
 
           <div id="marker-count-wrap" class="hidden">
             <span
-              class="font-mono text-[0.65rem] tracking-widest text-muted bg-bg/90 border border-border backdrop-blur px-3 py-1.5 rounded-md"
+              class="font-mono text-[12px] tracking-widest text-muted bg-bg border border-border backdrop-blur px-[12px] py-[4px] rounded-md"
             >
               <span id="marker-count">0</span> MARKERS
             </span>
@@ -114,12 +114,12 @@
 
         <!-- 필터 버튼 -->
         <div
-          class="absolute z-20 flex flex-col gap-2"
+          class="absolute z-20 flex flex-col gap-[8px]"
           style="top: 68px; right: 16px"
         >
           <button
             id="btn-smoking"
-            class="filter-btn w-11 h-11 flex items-center justify-center text-xl bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
+            class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
             title="흡연구역"
           >
             🚬
@@ -127,7 +127,7 @@
 
           <button
             id="btn-toilet"
-            class="filter-btn w-11 h-11 flex items-center justify-center text-xl bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
+            class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
             title="공중화장실"
           >
             🚽
@@ -135,46 +135,62 @@
 
           <button
             id="btn-fire"
-            class="filter-btn w-11 h-11 flex items-center justify-center text-xl bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
+            class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
             title="소방서·안전센터"
           >
             🚒
+          </button>
+
+          <button
+            id="btn-emergency"
+            class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
+            title="응급실"
+          >
+            🏥
+          </button>
+
+          <button
+            id="btn-bike"
+            class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
+            title="자전거 대여소"
+          >
+            🚴
           </button>
         </div>
 
         <!-- 정보 패널 -->
         <div
           id="info-panel"
-          class="absolute bottom-0 left-0 right-0 z-30 bg-bg/[0.97] backdrop-blur-2xl border-t border-border px-6 pt-5 pb-8"
+          class="absolute bottom-0 left-0 right-0 z-30 bg-bg backdrop-blur-2xl border-t border-border px-[24px] pt-[20px] pb-[32px]"
           style="
             transform: translateY(100%);
             transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
           "
         >
-          <div class="w-9 h-[3px] bg-border rounded-full mx-auto mb-5"></div>
+          <div class="w-[36px] h-[3px] bg-border rounded-full mx-auto mb-[20px]"></div>
 
-          <div class="flex justify-between items-start gap-4">
+          <div class="flex justify-between items-start gap-[16px]">
             <div class="flex-1 min-w-0">
               <span
                 id="place-tag"
-                class="inline-block font-mono text-[0.62rem] font-bold tracking-widest px-2 py-0.5 rounded mb-2 bg-smoke/15 text-smoke border border-smoke/30"
+                class="inline-block font-mono text-[0.62rem] font-bold tracking-widest px-[8px] py-[2px] rounded mb-[8px] bg-smoke/15 text-smoke border border-smoke/30"
               >
                 SMOKE
               </span>
               <p
                 id="place-title"
-                class="text-base font-black text-gray-50 leading-snug"
+                class="text-[16px] font-black text-gray-50 leading-snug"
               ></p>
               <p
                 id="place-address"
-                class="font-mono text-[0.68rem] text-muted mt-1 leading-relaxed"
+                class="font-mono text-[0.68rem] text-muted mt-[4px] leading-relaxed"
               ></p>
-              <p id="place-sub" class="text-xs text-muted/70 mt-1"></p>
+              <p id="place-sub" class="text-[12px] text-muted/70 mt-[4px]"></p>
             </div>
 
             <button
               id="close-panel"
-              class="flex-shrink-0 w-8 h-8 flex items-center justify-center border border-border rounded-md text-muted cursor-pointer hover:bg-white/[0.05] hover:text-gray-200 transition-all duration-150"
+              class="flex-shrink-0 w-[32px] h-[32px] flex items-center justify-center border border-border rounded-md text-muted cursor-pointer hover:bg-white/[0.05] hover:text-gray-200 transition-all duration-150"
             >
               <svg
                 width="11"

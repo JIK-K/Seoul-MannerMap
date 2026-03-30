@@ -35,7 +35,7 @@ const guCenters = {
 };
 
 function loadKakaoSDK() {
-  const dfd = $.Deferred();
+  const dfd = $.Deferred(); //JQuery의 Promise 구현체로 await로 사용가능
   if (typeof kakao !== "undefined") return dfd.resolve(true).promise();
   if (!KAKAO_KEY) return dfd.resolve(false).promise();
   const script = document.createElement("script");

@@ -185,3 +185,81 @@ export async function fetchFireStation(guName) {
     return [];
   }
 }
+
+export async function fetchEmergencyRoom(guName) {
+  try{
+    const data = await $.ajax({
+      url: `/seoul-api/${SEOUL_API_KEY}/json/TvEmgcHospitalInfo/1/1000/`,
+      method: "GET",
+      dataType: "json",
+    });
+    
+    const rows = data.TvEmgcHospitalInfo.row ?? [];
+
+    return rows.filter((r) => r.DUTYADDR && r.DUTYADDR.includes(guName))
+    .map((r) => ({
+      id: `emergency-${r.HPID}`,
+      name: r.DUTYNAME || "응급실",
+      address: r.DUTYADDR || "",
+      sub: [
+        r.DUTYEMCLSNAME,
+        r.DUTYTEL3 ? `☎ ${r.DUTYTEL3}` : r.DUTYTEL1 ? `☎ ${r.DUTYTEL1}` : "",
+      ].filter(Boolean).join(" · "),
+      lat: parseFloat(r.WGS84LAT),
+      lng: parseFloat(r.WGS84LON),
+      type: "EMERGENCY",
+    }))
+    .filter((r) => !isNaN(r.lat) && !isNaN(r.lng));
+    
+  } catch (err) {
+    console.error("❌ 응급실 API 오류:", err);
+    return [];
+  }
+}
+
+export async function fetchBikeStation(guName) {
+  try {
+    // 전체 3411건 → 1차 호출로 total 파악 후 페이징
+    const first = await $.ajax({
+      url: `/seoul-api/${SEOUL_API_KEY}/json/bikeStationMaster/1/1000/`,
+      method: "GET",
+      dataType: "json",
+    });
+
+    const total = parseInt(first?.bikeStationMaster?.list_total_count ?? 0);
+    let allRows = first?.bikeStationMaster?.row ?? [];
+
+    if (total > 1000) {
+      const pageRequests = [];
+      for (let start = 1001; start <= total; start += 1000) {
+        const end = Math.min(start + 999, total);
+        pageRequests.push(
+          $.ajax({
+            url: `/seoul-api/${SEOUL_API_KEY}/json/bikeStationMaster/${start}/${end}/`,
+            method: "GET",
+            dataType: "json",
+          }).then((d) => d?.bikeStationMaster?.row ?? []),
+        );
+      }
+      const pages = await Promise.all(pageRequests);
+      pages.forEach((rows) => { allRows = allRows.concat(rows); });
+    }
+
+    return allRows
+      .filter((r) => r.ADDR1 && r.ADDR1.includes(guName))
+      .map((r) => ({
+        id:      `bike-${r.RNTLS_ID}`,
+        name:    r.RNTLS_ID,
+        address: r.ADDR1,
+        sub:     r.ADDR2 || "",
+        lat:     parseFloat(r.LAT),
+        lng:     parseFloat(r.LOT),
+        type:    "BIKE",
+      }))
+      .filter((r) => !isNaN(r.lat) && !isNaN(r.lng) && r.lat !== 0 && r.lng !== 0);
+
+  } catch (err) {
+    console.error("❌ 자전거 대여소 API 오류:", err);
+    return [];
+  }
+}
