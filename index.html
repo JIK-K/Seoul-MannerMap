@@ -15,7 +15,9 @@
         id="gu-map-container"
         class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-gradient-to-b from-[#0d1520] to-bg transition-opacity duration-500"
       >
-        <div class="relative z-10 text-center mb-[20px] px-[24px] animate-fadeUp">
+        <div
+          class="relative z-10 text-center mb-[20px] px-[24px] animate-fadeUp"
+        >
           <div
             class="live-dot inline-flex items-center bg-accent/10 border border-accent/25 text-accent font-mono text-[12px] tracking-widest px-[12px] py-[4px] rounded mb-[12px]"
           >
@@ -113,49 +115,57 @@
         </div>
 
         <!-- 필터 버튼 -->
-        <div
-          class="absolute z-20 flex flex-col gap-[8px]"
-          style="top: 68px; right: 16px"
-        >
-          <button
-            id="btn-smoking"
-            class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
-            title="흡연구역"
-          >
-            🚬
-          </button>
+        <div class="absolute z-20 flex gap-[8px] top-[68px] right-[16px]">
+          <div>
+            <button
+              id="btn-quick"
+              class="flex items-center justify-center text-[20px] bg-red-500 px-[12px] py-[4px] backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-red-500/90"
+              title="긴급"
+            >
+              긴급
+            </button>
+          </div>
+          <div class="flex flex-col gap-[12px]">
+            <button
+              id="btn-smoking"
+              class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
+              title="흡연구역"
+            >
+              🚬
+            </button>
 
-          <button
-            id="btn-toilet"
-            class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
-            title="공중화장실"
-          >
-            🚽
-          </button>
+            <button
+              id="btn-toilet"
+              class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
+              title="공중화장실"
+            >
+              🚽
+            </button>
 
-          <button
-            id="btn-fire"
-            class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
-            title="소방서·안전센터"
-          >
-            🚒
-          </button>
+            <button
+              id="btn-fire"
+              class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
+              title="소방서·안전센터"
+            >
+              🚒
+            </button>
 
-          <button
-            id="btn-emergency"
-            class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
-            title="응급실"
-          >
-            🏥
-          </button>
+            <button
+              id="btn-emergency"
+              class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
+              title="응급실"
+            >
+              🏥
+            </button>
 
-          <button
-            id="btn-bike"
-            class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
-            title="자전거 대여소"
-          >
-            🚴
-          </button>
+            <button
+              id="btn-bike"
+              class="filter-btn w-[44px] h-[44px] flex items-center justify-center text-[20px] bg-surface/90 backdrop-blur border border-border rounded-lg cursor-pointer transition-all duration-150 hover:border-white/15 hover:bg-white/[0.06]"
+              title="자전거 대여소"
+            >
+              🚴
+            </button>
+          </div>
         </div>
 
         <!-- 정보 패널 -->
@@ -167,7 +177,9 @@
             transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
           "
         >
-          <div class="w-[36px] h-[3px] bg-border rounded-full mx-auto mb-[20px]"></div>
+          <div
+            class="w-[36px] h-[3px] bg-border rounded-full mx-auto mb-[20px]"
+          ></div>
 
           <div class="flex justify-between items-start gap-[16px]">
             <div class="flex-1 min-w-0">

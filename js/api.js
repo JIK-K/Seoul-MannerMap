@@ -187,30 +187,32 @@ export async function fetchFireStation(guName) {
 }
 
 export async function fetchEmergencyRoom(guName) {
-  try{
+  try {
     const data = await $.ajax({
       url: `/seoul-api/${SEOUL_API_KEY}/json/TvEmgcHospitalInfo/1/1000/`,
       method: "GET",
       dataType: "json",
     });
-    
+
     const rows = data.TvEmgcHospitalInfo.row ?? [];
 
-    return rows.filter((r) => r.DUTYADDR && r.DUTYADDR.includes(guName))
-    .map((r) => ({
-      id: `emergency-${r.HPID}`,
-      name: r.DUTYNAME || "응급실",
-      address: r.DUTYADDR || "",
-      sub: [
-        r.DUTYEMCLSNAME,
-        r.DUTYTEL3 ? `☎ ${r.DUTYTEL3}` : r.DUTYTEL1 ? `☎ ${r.DUTYTEL1}` : "",
-      ].filter(Boolean).join(" · "),
-      lat: parseFloat(r.WGS84LAT),
-      lng: parseFloat(r.WGS84LON),
-      type: "EMERGENCY",
-    }))
-    .filter((r) => !isNaN(r.lat) && !isNaN(r.lng));
-    
+    return rows
+      .filter((r) => r.DUTYADDR && r.DUTYADDR.includes(guName))
+      .map((r) => ({
+        id: `emergency-${r.HPID}`,
+        name: r.DUTYNAME || "응급실",
+        address: r.DUTYADDR || "",
+        sub: [
+          r.DUTYEMCLSNAME,
+          r.DUTYTEL3 ? `☎ ${r.DUTYTEL3}` : r.DUTYTEL1 ? `☎ ${r.DUTYTEL1}` : "",
+        ]
+          .filter(Boolean)
+          .join(" · "),
+        lat: parseFloat(r.WGS84LAT),
+        lng: parseFloat(r.WGS84LON),
+        type: "EMERGENCY",
+      }))
+      .filter((r) => !isNaN(r.lat) && !isNaN(r.lng));
   } catch (err) {
     console.error("❌ 응급실 API 오류:", err);
     return [];
@@ -242,24 +244,67 @@ export async function fetchBikeStation(guName) {
         );
       }
       const pages = await Promise.all(pageRequests);
-      pages.forEach((rows) => { allRows = allRows.concat(rows); });
+      pages.forEach((rows) => {
+        allRows = allRows.concat(rows);
+      });
     }
 
     return allRows
       .filter((r) => r.ADDR1 && r.ADDR1.includes(guName))
       .map((r) => ({
-        id:      `bike-${r.RNTLS_ID}`,
-        name:    r.RNTLS_ID,
+        id: `bike-${r.RNTLS_ID}`,
+        name: r.RNTLS_ID,
         address: r.ADDR1,
-        sub:     r.ADDR2 || "",
-        lat:     parseFloat(r.LAT),
-        lng:     parseFloat(r.LOT),
-        type:    "BIKE",
+        sub: r.ADDR2 || "",
+        lat: parseFloat(r.LAT),
+        lng: parseFloat(r.LOT),
+        type: "BIKE",
       }))
-      .filter((r) => !isNaN(r.lat) && !isNaN(r.lng) && r.lat !== 0 && r.lng !== 0);
-
+      .filter(
+        (r) => !isNaN(r.lat) && !isNaN(r.lng) && r.lat !== 0 && r.lng !== 0,
+      );
   } catch (err) {
     console.error("❌ 자전거 대여소 API 오류:", err);
     return [];
+  }
+}
+
+export async function fetchRegionName(lat, lng) {
+  try {
+    const data = await $.ajax({
+      url: "/kakao-api/v2/local/geo/coord2regioncode.json",
+      method: "GET",
+      headers: { Authorization: `KakaoAK ${KAKAO_REST_KEY}` },
+      data: { x: lng, y: lat },
+    });
+    // region_2depth_name이 "구로구" 같은 시/군/구 단위를 담고 있습니다.
+    return data?.documents?.[0]?.region_2depth_name || null;
+  } catch (err) {
+    console.error("구 이름 추출 실패:", err);
+    return null;
+  }
+}
+
+export async function fetchAddressName(lat, lng) {
+  try {
+    const data = await $.ajax({
+      url: "https://dapi.kakao.com/v2/local/geo/coord2address.json",
+      method: "GET",
+      headers: {
+        Authorization: `KakaoAK ${import.meta.env.VITE_KAKAO_REST_API_KEY}`,
+      },
+      data: { x: lng, y: lat },
+    });
+
+    // 도로명 주소가 있으면 도로명, 없으면 지번 주소를 가져옵니다.
+    const addr = data?.documents?.[0];
+    return (
+      addr?.road_address?.address_name ||
+      addr?.address?.address_name ||
+      "내 현재 위치"
+    );
+  } catch (err) {
+    console.error("주소 변환 실패:", err);
+    return "내 현재 위치";
   }
 }

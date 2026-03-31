@@ -4,6 +4,7 @@ import $ from "jquery";
 let map = null;
 let clusterer = null;
 let markers = [];
+let myMarker = null;
 
 export function initMap(containerId, center) {
   if (typeof kakao === "undefined" || !kakao.maps) {
@@ -53,4 +54,37 @@ export function bindMarkers(dataList) {
 
   markers = newMarkers;
   if (clusterer) clusterer.addMarkers(newMarkers);
+}
+
+export function setMyLocateMarker(coords) {
+  if (!map) return;
+
+  if (myMarker) {
+    myMarker.setMap(null);
+  }
+
+  const image = new kakao.maps.MarkerImage(
+    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png",
+    new kakao.maps.Size(35, 35),
+  );
+
+  myMarker = new kakao.maps.Marker({
+    position: new kakao.maps.LatLng(coords.lat, coords.lng),
+    image: image,
+    map: map,
+  });
+
+  myMarker.setMap(map);
+
+  // map.panTo(new kakao.maps.LatLng(coords.lat, coords.lng));
+}
+
+export function getNearest(myLat, myLng, dataList) {
+  if (!dataList || dataList.length === 0) return null;
+
+  return dataList.reduce((prev, curr) => {
+    const distPrev = Math.hypot(myLat - prev.lat, myLng - prev.lng);
+    const distCurr = Math.hypot(myLat - curr.lat, myLng - curr.lng);
+    return distCurr < distPrev ? curr : prev;
+  });
 }

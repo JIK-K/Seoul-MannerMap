@@ -1,7 +1,15 @@
 // js/ui.js
 import $ from "jquery";
-import { fetchSmoking, fetchToilet, fetchFireStation, fetchEmergencyRoom, fetchBikeStation } from "./api.js";
-import { bindMarkers } from "./map.js";
+import {
+  fetchSmoking,
+  fetchToilet,
+  fetchFireStation,
+  fetchEmergencyRoom,
+  fetchBikeStation,
+  fetchRegionName,
+  fetchAddressName,
+} from "./api.js";
+import { bindMarkers, moveTo, setMyLocateMarker, getNearest } from "./map.js";
 import { goHome } from "./state.js";
 
 const TAG_CONFIG = {
@@ -17,14 +25,14 @@ const TAG_CONFIG = {
     label: "FIRE STATION",
     cls: "bg-fire/15   text-fire   border border-fire/30",
   },
-  EMERGENCY:{
+  EMERGENCY: {
     label: "EMERGENCY ROOM",
     cls: "bg-emergency/15   text-emergency   border border-emergency/30",
   },
-  BIKE:{
+  BIKE: {
     label: "BIKE STATION",
     cls: "bg-bike/15   text-bike   border border-bike/30",
-  }
+  },
 };
 
 // 버튼별 활성 스타일 — v4에서 CSS 변수로 style 직접 주입
@@ -36,6 +44,8 @@ const BTN_ACTIVE_STYLE = {
   bike: { borderColor: "#22c55e", background: "rgba(34,197,94,0.10)" },
 };
 
+let activeBtn = null;
+
 export function initUI() {
   const $panel = $("#info-panel");
   const $btnSmoking = $("#btn-smoking");
@@ -43,7 +53,13 @@ export function initUI() {
   const $btnFire = $("#btn-fire");
   const $btnEmergency = $("#btn-emergency");
   const $btnBike = $("#btn-bike");
-  const $allBtns = $btnSmoking.add($btnToilet).add($btnFire).add($btnEmergency).add($btnBike);
+  const $btnQuick = $("#btn-quick");
+  const $allBtns = $btnSmoking
+    .add($btnToilet)
+    .add($btnFire)
+    .add($btnEmergency)
+    .add($btnBike)
+    .add($btnQuick);
 
   const getCurrentGu = () =>
     $("#selected-gu-name")
@@ -55,6 +71,7 @@ export function initUI() {
   function setActive($btn, activeKey) {
     $allBtns.css({ borderColor: "", background: "" });
     const s = BTN_ACTIVE_STYLE[activeKey];
+    activeBtn = activeKey;
     $btn.css({ borderColor: s.borderColor, background: s.background });
   }
 
@@ -78,6 +95,31 @@ export function initUI() {
       $btn.text(emoji);
       $(window).trigger("showMapLoading", [false]);
     }
+  }
+
+  function getLocation() {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            resolve({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
+          },
+          function (error) {
+            reject(error);
+          },
+          {
+            enableHighAccuracy: false,
+            maximumAge: 0,
+            timeout: 10000,
+          },
+        );
+      } else {
+        reject(new Error("Geolocation is not supported"));
+      }
+    });
   }
 
   // ── 이벤트 바인딩 ──────────────────────────────────────────────
@@ -126,9 +168,60 @@ export function initUI() {
     );
   });
 
+  $btnQuick.on("click", async function () {
+    try {
+      $(window).trigger("showMapLoading", [true, "근처 시설 탐색 중..."]);
+
+      const { lat, lng } = await getLocation();
+      setMyLocateMarker({ lat, lng });
+
+      const guName = await fetchRegionName(lat, lng);
+
+      if (guName) {
+        $("#selected-gu-name").text(`${guName} 안심·매너`);
+
+        const targetKey = activeBtn || "smoke";
+        const fetchMap = {
+          smoke: fetchSmoking,
+          toilet: fetchToilet,
+          fire: fetchFireStation,
+          emergency: fetchEmergencyRoom,
+          bike: fetchBikeStation,
+        };
+
+        const data = await fetchMap[targetKey](guName);
+        bindMarkers(data);
+        $(window).trigger("updateCount", [data.length]);
+
+        const nearest = getNearest(lat, lng, data);
+        if (nearest) {
+          moveTo({ lat: nearest.lat, lng: nearest.lng });
+          $(window).trigger("openDetail", [nearest]);
+          const startName = await fetchAddressName(lat, lng);
+          const destName = encodeURIComponent(nearest.name);
+
+          const routeUrl = `https://map.kakao.com/link/from/${startName},${lat},${lng}/to/${destName},${nearest.lat},${nearest.lng}`;
+
+          window.open(routeUrl, "_blank");
+        } else {
+          alert(`${guName} 지역 내에 데이터가 존재하지 않습니다.`);
+        }
+      }
+    } catch (err) {
+      alert("긴급 탐색에 실패했습니다.", err);
+    } finally {
+      $(window).trigger("showMapLoading", [false]);
+    }
+  });
+
   // main.js에서 발행하는 버튼 관련 이벤트 수신
   $(window).on("setActiveBtn", (_e, key) => {
-    const map = { smoke: $btnSmoking, toilet: $btnToilet, fire: $btnFire, emergency: $btnEmergency };
+    const map = {
+      smoke: $btnSmoking,
+      toilet: $btnToilet,
+      fire: $btnFire,
+      emergency: $btnEmergency,
+    };
     if (map[key]) setActive(map[key], key);
   });
   $(window).on("resetBtns", resetBtns);
