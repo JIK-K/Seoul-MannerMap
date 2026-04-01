@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  base: "/Seoul-MannerMap/",
   plugins: [tailwindcss()],
   server: {
     proxy: {
