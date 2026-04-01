@@ -1,12 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/seoul-api/:path*",
-      "destination": "http://openapi.seoul.go.kr:8088/:path*"
+      "source": "/seoul-api/(.*)",
+      "destination": "http://openapi.seoul.go.kr:8088/$1"
     },
     {
-      "source": "/kakao-api/:path*",
-      "destination": "https://dapi.kakao.com/:path*"
+      "source": "/kakao-api/(.*)",
+      "destination": "https://dapi.kakao.com/$1"
     }
   ]
 }
